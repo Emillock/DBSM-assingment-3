@@ -1,4 +1,5 @@
 drop table books_for_courses;
+--drop table books;
 
 create table books_for_courses(
 	CRN int not null,
@@ -16,6 +17,24 @@ create table books_for_courses(
 
 COPY books_for_courses FROM 'C:\Users\Public\Unnormalized1(Sheet1).csv' DELIMITER ',' CSV HEADER;
 select * from books_for_courses;
+
+create table books(
+	ISBN int not null,
+	title varchar(255),
+	authors varchar(255),
+	edition int,
+	pages int,
+	b_year int,
+	primary key(ISBN)
+	--foreign key(ISBN) references books_for_courses(ISBN)
+);
+
+INSERT INTO books
+SELECT distinct ISBN,title,authors,edition,pages,b_year FROM books_for_courses;
+
+ALTER TABLE books_for_courses
+ADD FOREIGN KEY (ISBN) REFERENCES books(ISBN);
+select * from books;
 
 -- insert into books_for_courses values (
 -- 	'20424',	
