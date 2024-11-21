@@ -18,7 +18,8 @@ create table books_for_courses(
 	primary key(CRN,ISBN)
 );
 
-COPY books_for_courses FROM 'C:\Users\Public\Unnormalized1(Sheet1).csv' DELIMITER ',' CSV HEADER;
+copy books_for_courses from 'C:\Users\Public\Unnormalized1(Sheet1).csv' delimiter ',' csv header;
+
 select * from books_for_courses;
 
 create table books(
@@ -34,8 +35,8 @@ create table books(
 	--foreign key(ISBN) references books_for_courses(ISBN)
 );
 
-INSERT INTO books
-SELECT distinct ISBN,
+insert into books
+select distinct ISBN,
 				title,
 				authors,
 				edition,
@@ -43,16 +44,18 @@ SELECT distinct ISBN,
 				publisher_address,
 				pages,
 				b_year 
-				FROM books_for_courses;
-ALTER TABLE books_for_courses
-ADD FOREIGN KEY (ISBN) REFERENCES books(ISBN),
-DROP COLUMN title,
-DROP COLUMN authors,
-DROP COLUMN edition,
-DROP COLUMN publisher,
-DROP COLUMN publisher_address,
-DROP COLUMN pages,
-DROP COLUMN b_year;
+				from books_for_courses;
+				
+alter table books_for_courses
+add foreign key (ISBN) references books(ISBN),
+drop column title,
+drop column authors,
+drop column edition,
+drop column publisher,
+drop column publisher_address,
+drop column pages,
+drop column b_year;
+
 select * from books_for_courses;
 
 create table authors(
@@ -62,9 +65,12 @@ create table authors(
 	foreign key(ISBN) references books(ISBN)
 );
 
-INSERT INTO authors
-SELECT distinct ISBN,regexp_split_to_table(authors, ', ') FROM books;
+insert into authors
+select distinct ISBN,regexp_split_to_table(authors, ', ') from books;
+
 select * from authors;
+
+alter table books drop column authors;
 
 -- insert into books_for_courses values (
 -- 	'20424',	
