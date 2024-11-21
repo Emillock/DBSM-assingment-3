@@ -1,11 +1,8 @@
 drop table books_for_courses;
+drop table courses;
 drop table authors;
 drop table books;
 drop table publishers;
-
-
-
-
 
 create table books_for_courses(
 	CRN int not null,
@@ -89,11 +86,29 @@ select * from publishers;
 
 alter table books add column publisher_number integer references publishers(publisher_number); 
 
-UPDATE books
-SET publisher_number = publishers.publisher_number
-FROM publishers
+update books
+set publisher_number = publishers.publisher_number
+from publishers
 where (books.publisher = publishers.publisher_name);
 
 alter table books drop column publisher,drop column publisher_address;
 
 select * from books;
+
+create table courses(
+	CRN int not null,
+	course_name varchar(255),
+	primary key(CRN)
+);
+
+insert into courses
+select distinct CRN,course_name from books_for_courses;
+alter table books_for_courses 
+add foreign key (CRN) references courses(CRN),
+drop column course_name;
+
+-- select * from books_for_courses;
+-- select * from courses;
+-- select * from books;
+-- select * from authors;
+-- select * from publishers;
