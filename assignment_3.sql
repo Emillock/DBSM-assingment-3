@@ -1,5 +1,8 @@
+drop table authors;
 drop table books_for_courses;
---drop table books;
+drop table books;
+
+
 
 create table books_for_courses(
 	CRN int not null,
@@ -23,6 +26,8 @@ create table books(
 	title varchar(255),
 	authors varchar(255),
 	edition int,
+	publisher varchar(255),
+	publisher_address varchar(255),
 	pages int,
 	b_year int,
 	primary key(ISBN)
@@ -30,11 +35,36 @@ create table books(
 );
 
 INSERT INTO books
-SELECT distinct ISBN,title,authors,edition,pages,b_year FROM books_for_courses;
-
+SELECT distinct ISBN,
+				title,
+				authors,
+				edition,
+				publisher,
+				publisher_address,
+				pages,
+				b_year 
+				FROM books_for_courses;
 ALTER TABLE books_for_courses
-ADD FOREIGN KEY (ISBN) REFERENCES books(ISBN);
-select * from books;
+ADD FOREIGN KEY (ISBN) REFERENCES books(ISBN),
+DROP COLUMN title,
+DROP COLUMN authors,
+DROP COLUMN edition,
+DROP COLUMN publisher,
+DROP COLUMN publisher_address,
+DROP COLUMN pages,
+DROP COLUMN b_year;
+select * from books_for_courses;
+
+create table authors(
+	ISBN int not null,
+	author varchar(255),
+	primary key(ISBN,author),
+	foreign key(ISBN) references books(ISBN)
+);
+
+INSERT INTO authors
+SELECT distinct ISBN,regexp_split_to_table(authors, ', ') FROM books;
+select * from authors;
 
 -- insert into books_for_courses values (
 -- 	'20424',	
