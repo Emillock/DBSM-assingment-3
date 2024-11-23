@@ -16,5 +16,6 @@
 <p>
 	After both files are properly installed, the "assignment_3.sql" can be executed from command line using this command: <br>
 	<code>psql -U user_name -d database_name -f file.sql</code>
+	<br/>
 	Another option is to execute the code through PG Admin interface (there is a need to install it first).
 </p>
